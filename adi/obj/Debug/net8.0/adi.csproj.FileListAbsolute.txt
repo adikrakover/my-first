@@ -1,0 +1,60 @@
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\adi.exe
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\adi.deps.json
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\adi.runtimeconfig.json
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\adi.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\adi.pdb
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\System.CommandLine.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\cs\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\de\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\es\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\fr\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\it\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\ja\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\ko\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\pl\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\pt-BR\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\ru\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\tr\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\zh-Hans\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\bin\Debug\net8.0\zh-Hant\System.CommandLine.resources.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\adi.csproj.AssemblyReference.cache
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\adi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\adi.AssemblyInfoInputs.cache
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\adi.AssemblyInfo.cs
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\adi.csproj.CoreCompileInputs.cache
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\adi.csproj.Up2Date
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\adi.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\refint\adi.dll
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\adi.pdb
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\adi.genruntimeconfig.cache
+C:\Users\user1\Documents\תכנות\שנה ב\פרקטיקוד\adi\adi\obj\Debug\net8.0\ref\adi.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\adi.exe
+D:\practyCode\adi\adi\bin\Debug\net8.0\adi.deps.json
+D:\practyCode\adi\adi\bin\Debug\net8.0\adi.runtimeconfig.json
+D:\practyCode\adi\adi\bin\Debug\net8.0\adi.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\adi.pdb
+D:\practyCode\adi\adi\bin\Debug\net8.0\System.CommandLine.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\cs\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\de\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\es\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\fr\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\it\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\ja\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\ko\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\pl\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\pt-BR\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\ru\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\tr\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\zh-Hans\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\bin\Debug\net8.0\zh-Hant\System.CommandLine.resources.dll
+D:\practyCode\adi\adi\obj\Debug\net8.0\adi.csproj.AssemblyReference.cache
+D:\practyCode\adi\adi\obj\Debug\net8.0\adi.GeneratedMSBuildEditorConfig.editorconfig
+D:\practyCode\adi\adi\obj\Debug\net8.0\adi.AssemblyInfoInputs.cache
+D:\practyCode\adi\adi\obj\Debug\net8.0\adi.AssemblyInfo.cs
+D:\practyCode\adi\adi\obj\Debug\net8.0\adi.csproj.CoreCompileInputs.cache
+D:\practyCode\adi\adi\obj\Debug\net8.0\adi.csproj.Up2Date
+D:\practyCode\adi\adi\obj\Debug\net8.0\adi.dll
+D:\practyCode\adi\adi\obj\Debug\net8.0\refint\adi.dll
+D:\practyCode\adi\adi\obj\Debug\net8.0\adi.pdb
+D:\practyCode\adi\adi\obj\Debug\net8.0\adi.genruntimeconfig.cache
+D:\practyCode\adi\adi\obj\Debug\net8.0\ref\adi.dll
