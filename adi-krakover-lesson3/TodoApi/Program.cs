@@ -14,15 +14,22 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.AllowAnyOrigin()
+                          policy.WithOrigins(
+                                    "http://localhost:3000",
+                                    "https://adi-krakovr-client.onrender.com",
+                                    "https://todo-client-krakover.onrender.com"
+                                )
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
                       });
 });
 
 // --- Database Connection ---
-// שימוש ב-DefaultConnection במקום ToDoDB
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// ניסיון לקרוא מ-Environment Variables או מ-appsettings
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+    ?? "Server=bm0udkky9qqadnpzi1xb-mysql.services.clever-cloud.com;Database=bm0udkky9qqadnpzi1xb;Uid=uivttg33myotjsre;Pwd=JEjXkMzg0rtZFK1syhyB;Port=3306";
+
 builder.Services.AddDbContext<ToDoDbContext>(options =>
     options.UseMySql(
         connectionString,
