@@ -6,8 +6,9 @@ const BASE_URL = process.env.REACT_APP_API_URL;
 const ENDPOINT = '/api/Item'; // הנתיב הספציפי לטבלת המשימות
 
 // 1. הגדרת כתובת ה-API כ-default
-// axios.defaults.baseURL יהיה הכתובת המלאה כולל הנתיב
-axios.defaults.baseURL = `${BASE_URL}${ENDPOINT}`; 
+// התיקון: נגדיר את baseURL רק לכתובת השרת (BASE_URL)
+// ונוסיף את ה-ENDPOINT בפונקציות ה-CRUD למטה.
+axios.defaults.baseURL = BASE_URL; 
 
 // *** זו השורה המתוקנת! ***
 // הגדרת Content-Type עבור POST ו-PUT (כדי למנוע שגיאת 415 בשניהם)
@@ -37,8 +38,8 @@ axios.interceptors.response.use(
 
 // GET (שליפת כל המשימות)
 export const getTasks = async () => {
-  // הקריאה היא לנתיב הבסיס שהוגדר: https://...render.com/api/Item/
-  const response = await axios.get('/'); 
+  // עכשיו הקריאה היא לנתיב: BASE_URL + ENDPOINT -> https://...render.com/api/Item
+  const response = await axios.get(ENDPOINT); 
   return response.data;
 };
 
@@ -48,19 +49,19 @@ export const createTask = async (taskName) => {
     name: taskName,
     isComplete: false,
   };
-  const response = await axios.post('/', newTask);
+  const response = await axios.post(ENDPOINT, newTask);
   return response.data;
 };
 
 // PUT (עדכון משימה קיימת)
 export const updateTask = async (id, updatedTask) => {
-  // נשלח את האובייקט המלא לעדכון. הנתיב הוא /api/Item/{id}
-  const response = await axios.put(`/${id}`, updatedTask);
+  // הנתיב: BASE_URL + ENDPOINT + id -> https://...render.com/api/Item/{id}
+  const response = await axios.put(`${ENDPOINT}/${id}`, updatedTask);
   return response.data;
 };
 
 // DELETE (מחיקת משימה)
 export const deleteTask = async (id) => {
-  // הנתיב הוא /api/Item/{id}
-  await axios.delete(`/${id}`);
+  // הנתיב: BASE_URL + ENDPOINT + id -> https://...render.com/api/Item/{id}
+  await axios.delete(`${ENDPOINT}/${id}`);
 };
