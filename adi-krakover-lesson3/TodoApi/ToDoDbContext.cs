@@ -18,10 +18,20 @@ public partial class ToDoDbContext : DbContext
     }
 
     public virtual DbSet<Item> Items { get; set; }
-    public virtual DbSet<Item> Item { get; set; } = null!; 
+    public virtual DbSet<Item> Item { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySql("name=ToDoDB", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.44-mysql"));
+    {
+        // אל תעשה כלום כאן - ה-connection string מוגדר ב-Program.cs
+        // רק אם לא הוגדר כבר, השתמש בברירת מחדל (לפיתוח מקומי)
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseMySql(
+                "name=DefaultConnection",
+                Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.44-mysql")
+            );
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
