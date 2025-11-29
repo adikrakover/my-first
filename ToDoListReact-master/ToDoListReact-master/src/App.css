@@ -1,0 +1,161 @@
+/* Google Font Import (Inter) */
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&display=swap');
+
+/* --- B A S E --- */
+
+body {
+    font-family: 'Heebo', sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* יישור למעלה */
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 50px; /* רווח עליון */
+    direction: rtl; /* יישור לימין */
+}
+
+/* --- C O N T A I N E R --- */
+
+.todo-app-container {
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px; /* רוחב מקסימלי נוח */
+}
+
+h1 {
+    text-align: center;
+    color: #3f51b5; /* כחול כהה */
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* --- I N P U T   F O R M --- */
+
+.input-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.input-form input[type="text"] {
+    flex-grow: 1;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.input-form button {
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 700;
+}
+
+.input-form button:hover {
+    background-color: #303f9f;
+}
+
+/* --- T O D O   L I S T --- */
+
+.todo-list {
+    list-style: none;
+    padding: 0;
+}
+
+.todo-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border-left: 5px solid #3f51b5; /* פס צבעוני בצד */
+    transition: all 0.3s;
+}
+
+/* עיצוב למשימה שהושלמה */
+.todo-list li.completed {
+    background-color: #e8eaf6; /* צבע בהיר יותר */
+    border-left: 5px solid #4caf50; /* פס ירוק */
+    opacity: 0.7;
+}
+
+.task-text {
+    flex-grow: 1;
+    font-size: 16px;
+    cursor: pointer; /* כדי להראות שניתן ללחוץ */
+    padding-left: 10px;
+}
+
+/* קו חוצה למשימה שהושלמה */
+.todo-list li.completed .task-text {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* --- A C T I O N S --- */
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.actions button {
+    border: none;
+    cursor: pointer;
+    background: none;
+    font-size: 18px;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+
+.actions button:hover {
+    transform: scale(1.1);
+}
+
+.delete-btn {
+    color: #f44336; /* אדום למחיקה */
+}
+
+.complete-btn {
+    color: #4caf50; /* ירוק להשלמה */
+}
+
+.error-message {
+    background-color: #ffdddd;
+    color: #d8000c;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #d8000c;
+    text-align: center;
+}
+
+.loading-state {
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    color: #777;
+}
+
+.no-tasks {
+    text-align: center;
+    color: #999;
+    margin-top: 20px;
+    font-style: italic;
+}

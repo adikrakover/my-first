@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getTasks, createTask, updateTask, deleteTask } from './service.js';
+import './App.css';
 
 function App() {
   const [todos, setTodos] = useState([]);
