@@ -136,8 +136,8 @@ app.MapPut("/api/items/{id}", async (ToDoDbContext context, int id, Item updated
         var itemToUpdate = await context.Item.FindAsync(id);
         if (itemToUpdate == null) return Results.NotFound();
 
-        itemToUpdate.Title = updatedItem.Title;
-        itemToUpdate.IsCompleted = updatedItem.IsCompleted;
+        itemToUpdate.Name = updatedItem.Name;
+        itemToUpdate.IsComplete = updatedItem.IsComplete;
 
         await context.SaveChangesAsync();
         return Results.NoContent();
