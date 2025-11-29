@@ -2,13 +2,12 @@
     FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
     WORKDIR /src
     
-    COPY ["TodoApi/TodoApi.csproj", "TodoApi/"]
-    RUN dotnet restore "TodoApi/TodoApi.csproj"
+    COPY ["TodoApi.csproj", "."]
+    RUN dotnet restore "TodoApi.csproj"
     
-
     COPY . .
     
-    WORKDIR /src/TodoApi
+    WORKDIR /src
     RUN dotnet publish "TodoApi.csproj" -c Release -o /app/publish
     
 
