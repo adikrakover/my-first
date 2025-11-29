@@ -1,183 +1,171 @@
-
-
-
-// using Microsoft.EntityFrameworkCore;
-// using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-// using TodoApi; // מנוכח שבדקנו, זה ה-Namespace הנכון עבור Item ו-ToDoDbContext
-
-
-// var builder = WebApplication.CreateBuilder(args);
-
-// // --- הוספת החיבור למסד הנתונים (שלב 1) ---
-// var connectionString = builder.Configuration.GetConnectionString("ToDoDB");
-// var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-   
-// builder.Services.AddDbContext<ToDoDbContext>(options =>
-//     options.UseMySql(
-//         connectionString,
-//         ServerVersion.AutoDetect(connectionString)
-//     )
-// );
-// // ------------------------------------------
-
-// var app = builder.Build();
-// app.UseCors(MyAllowSpecificOrigins);
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy(name: MyAllowSpecificOrigins,
-//                       policy =>
-//                       {
-//                           policy.AllowAnyOrigin() // מאפשר מכל דומיין
-//                                 .AllowAnyHeader() // מאפשר את כל כותרות הבקשה
-//                                 .AllowAnyMethod(); // מאפשר את כל המתודות (GET, POST, PUT, DELETE)
-//                       });
-// });
-
-// // 1. שליפת כל המשימות (GET: /api/items)
-// app.MapGet("/api/items", async (ToDoDbContext context) =>
-// {
-//     return await context.Item.ToListAsync();
-// });
-
-// // 2. הוספת משימה חדשה (POST: /api/items)
-// app.MapPost("/api/items", async (ToDoDbContext context, Item item) =>
-// {
-//     context.Item.Add(item);
-//     await context.SaveChangesAsync();
-//     return Results.Created($"/api/items/{item.Id}", item);
-// });
-
-// // 3. עדכון משימה (PUT: /api/items/{id})
-// app.MapPut("/api/items/{id}", async (ToDoDbContext context, int id, Item updatedItem) =>
-// {
-//     var itemToUpdate = await context.Item.FindAsync(id);
-
-//     if (itemToUpdate == null) return Results.NotFound();
-
-//     itemToUpdate.Name = updatedItem.Name;
-//     itemToUpdate.IsComplete = updatedItem.IsComplete;
-
-//     await context.SaveChangesAsync();
-//     return Results.NoContent();
-// });
-
-// // 4. מחיקת משימה (DELETE: /api/items/{id})
-// app.MapDelete("/api/items/{id}", async (ToDoDbContext context, int id) =>
-// {
-//     var itemToDelete = await context.Item.FindAsync(id);
-
-//     if (itemToDelete == null) return Results.NotFound();
-
-//     context.Item.Remove(itemToDelete);
-//     await context.SaveChangesAsync();
-//     return Results.NoContent();
-// });
-// // ------------------------------------------
-
-// app.Run();
-
-
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using TodoApi; // מנוכח שבדקנו, זה ה-Namespace הנכון עבור Item ו-ToDoDbContext
+using TodoApi;
 
-// הגדרת שם למדיניות CORS
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 var builder = WebApplication.CreateBuilder(args);
 
-// --- הוספת שירותים ל-Swagger/OpenAPI ---
-// חובה להוסיף את שירותי יצירת ה-Swagger JSON
+// --- Swagger Services ---
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// ------------------------------------------
 
-// --- הוספת שירות CORS (Services) ---
+// --- CORS Configuration ---
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          // מאפשר לכל Domain לפנות ל-API (הרשאה כללית)
                           policy.AllowAnyOrigin()
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
                       });
 });
-// ------------------------------------------
 
-// --- הוספת החיבור למסד הנתונים ---
-var connectionString = builder.Configuration.GetConnectionString("ToDoDB");
-
+// --- Database Connection ---
+// שימוש ב-DefaultConnection במקום ToDoDB
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ToDoDbContext>(options =>
     options.UseMySql(
         connectionString,
         ServerVersion.AutoDetect(connectionString)
     )
 );
-// ------------------------------------------
 
 var app = builder.Build();
 
-// --- 2. שימוש ב-Swagger UI ו-JSON ---
-// חובה להפעיל את ה-Swagger UI רק בסביבת פיתוח
-if (app.Environment.IsDevelopment())
+// --- Auto-create database and run migrations on startup ---
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    
-    // הפנייה אוטומטית מכתובת הבסיס ל-Swagger UI
-    app.MapGet("/", () => Results.Redirect("/swagger"));
+    var dbContext = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
+    try
+    {
+        // יוצר את מסד הנתונים והטבלאות אוטומטית
+        dbContext.Database.EnsureCreated();
+        Console.WriteLine("Database created/verified successfully!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Database initialization error: {ex.Message}");
+    }
 }
-// ------------------------------------
 
-// --- 2. שימוש ב-CORS (Middleware) ---
-// חובה להפעיל לפני MapGet/MapPost כדי לאפשר גישה חיצונית
+// --- Swagger UI (Development and Production) ---
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// --- CORS Middleware ---
 app.UseCors(MyAllowSpecificOrigins);
-// ------------------------------------
 
+// --- Root Endpoint ---
+app.MapGet("/", () => Results.Ok(new
+{
+    message = "Todo API is running successfully!",
+    version = "1.0",
+    endpoints = new
+    {
+        getAllItems = "/api/items",
+        swagger = "/swagger",
+        health = "/health"
+    }
+}));
 
-// --- ניתובים לניהול משימות (CRUD) ---
+// --- Health Check Endpoint ---
+app.MapGet("/health", async (ToDoDbContext context) =>
+{
+    try
+    {
+        await context.Database.CanConnectAsync();
+        var itemCount = await context.Item.CountAsync();
+        return Results.Ok(new
+        {
+            status = "healthy",
+            database = "connected",
+            itemsCount = itemCount
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Database connection failed: {ex.Message}");
+    }
+});
 
-// 1. שליפת כל המשימות (GET: /api/items)
+// --- CRUD Endpoints ---
+
+// 1. Get all items
 app.MapGet("/api/items", async (ToDoDbContext context) =>
 {
-    return await context.Item.ToListAsync();
+    try
+    {
+        var items = await context.Item.ToListAsync();
+        return Results.Ok(items);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error getting items: {ex.Message}");
+        return Results.Problem($"Error: {ex.Message}");
+    }
 });
 
-// 2. הוספת משימה חדשה (POST: /api/items)
+// 2. Get single item by id
+app.MapGet("/api/items/{id}", async (ToDoDbContext context, int id) =>
+{
+    var item = await context.Item.FindAsync(id);
+    return item == null ? Results.NotFound() : Results.Ok(item);
+});
+
+// 3. Create new item
 app.MapPost("/api/items", async (ToDoDbContext context, Item item) =>
 {
-    context.Item.Add(item);
-    await context.SaveChangesAsync();
-    return Results.Created($"/api/items/{item.Id}", item);
+    try
+    {
+        context.Item.Add(item);
+        await context.SaveChangesAsync();
+        return Results.Created($"/api/items/{item.Id}", item);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error creating item: {ex.Message}");
+        return Results.Problem($"Error: {ex.Message}");
+    }
 });
 
-// 3. עדכון משימה (PUT: /api/items/{id})
+// 4. Update item
 app.MapPut("/api/items/{id}", async (ToDoDbContext context, int id, Item updatedItem) =>
 {
-    var itemToUpdate = await context.Item.FindAsync(id);
+    try
+    {
+        var itemToUpdate = await context.Item.FindAsync(id);
+        if (itemToUpdate == null) return Results.NotFound();
 
-    if (itemToUpdate == null) return Results.NotFound();
+        itemToUpdate.Title = updatedItem.Title;
+        itemToUpdate.IsCompleted = updatedItem.IsCompleted;
 
-    itemToUpdate.Name = updatedItem.Name;
-    itemToUpdate.IsComplete = updatedItem.IsComplete;
-
-    await context.SaveChangesAsync();
-    return Results.NoContent();
+        await context.SaveChangesAsync();
+        return Results.NoContent();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error updating item: {ex.Message}");
+        return Results.Problem($"Error: {ex.Message}");
+    }
 });
 
-// 4. מחיקת משימה (DELETE: /api/items/{id})
+// 5. Delete item
 app.MapDelete("/api/items/{id}", async (ToDoDbContext context, int id) =>
 {
-    var itemToDelete = await context.Item.FindAsync(id);
+    try
+    {
+        var itemToDelete = await context.Item.FindAsync(id);
+        if (itemToDelete == null) return Results.NotFound();
 
-    if (itemToDelete == null) return Results.NotFound();
-
-    context.Item.Remove(itemToDelete);
-    await context.SaveChangesAsync();
-    return Results.NoContent();
+        context.Item.Remove(itemToDelete);
+        await context.SaveChangesAsync();
+        return Results.NoContent();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error deleting item: {ex.Message}");
+        return Results.Problem($"Error: {ex.Message}");
+    }
 });
-// ------------------------------------------
 
 app.Run();
