@@ -3,7 +3,8 @@ import axios from 'axios';
 // כתובת ה-API הבסיסית: נקראת ממשתנה הסביבה שהגדרנו בקובץ .env
 // הערה: נשתמש ב-base URL הכללי (https://todo-api-krakover.onrender.com)
 const BASE_URL = process.env.REACT_APP_API_URL;
-const ENDPOINT = '/api/Item'; // הנתיב הספציפי לטבלת המשימות
+// *** תיקון סופי וודאי: משנים ל-'/api/items' בהתאם ל-Program.cs ***
+const ENDPOINT = '/api/items'; 
 
 // 1. הגדרת כתובת ה-API כ-default
 // התיקון: נגדיר את baseURL רק לכתובת השרת (BASE_URL)
@@ -38,7 +39,7 @@ axios.interceptors.response.use(
 
 // GET (שליפת כל המשימות)
 export const getTasks = async () => {
-  // עכשיו הקריאה היא לנתיב: BASE_URL + ENDPOINT -> https://...render.com/api/Item
+  // עכשיו הקריאה היא לנתיב: BASE_URL + ENDPOINT -> https://...render.com/api/items
   const response = await axios.get(ENDPOINT); 
   return response.data;
 };
@@ -46,8 +47,9 @@ export const getTasks = async () => {
 // POST (יצירת משימה חדשה)
 export const createTask = async (taskName) => {
   const newTask = {
-    name: taskName,
-    isComplete: false,
+    // שינוי שם השדה מ-name ל-Title, בהתאם לקובץ Program.cs שהשתמש ב-Title
+    title: taskName, 
+    isCompleted: false, // שינוי מ-isComplete ל-isCompleted
   };
   const response = await axios.post(ENDPOINT, newTask);
   return response.data;
@@ -55,13 +57,13 @@ export const createTask = async (taskName) => {
 
 // PUT (עדכון משימה קיימת)
 export const updateTask = async (id, updatedTask) => {
-  // הנתיב: BASE_URL + ENDPOINT + id -> https://...render.com/api/Item/{id}
+  // הנתיב: BASE_URL + ENDPOINT + id -> https://...render.com/api/items/{id}
   const response = await axios.put(`${ENDPOINT}/${id}`, updatedTask);
   return response.data;
 };
 
 // DELETE (מחיקת משימה)
 export const deleteTask = async (id) => {
-  // הנתיב: BASE_URL + ENDPOINT + id -> https://...render.com/api/Item/{id}
+  // הנתיב: BASE_URL + ENDPOINT + id -> https://...render.com/api/items/{id}
   await axios.delete(`${ENDPOINT}/${id}`);
 };
