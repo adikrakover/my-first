@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTasks, createTask, updateTask, deleteTask } from './service.js';
+import { getTasks, createTask, updateTask, deleteTask } from './service';
 import './App.css';
 
 function App() {
