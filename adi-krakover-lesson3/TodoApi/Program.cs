@@ -1,35 +1,25 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Swagger Services ---
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// --- CORS Configuration ---
+// --- CORS Configuration - מאפשר לכולם לגשת ---
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins(
-                                    "http://localhost:3000",
-                                    "https://adi-krakovr-client.onrender.com"
-                                )
-                                .AllowAnyHeader()
-                                .AllowAnyMethod()
-                                .AllowCredentials();
-                      });
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 // --- Database Connection ---
-// ניסיון לקרוא מ-Environment Variables או מ-appsettings
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
-    ?? "Server=bm0udkky9qqadnpzi1xb-mysql.services.clever-cloud.com;Database=bm0udkky9qqadnpzi1xb;Uid=uivttg33myotjsre;Pwd=JEjXkMzg0rtZFK1syhyB;Port=3306";
-
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ToDoDbContext>(options =>
     options.UseMySql(
         connectionString,
@@ -39,16 +29,15 @@ builder.Services.AddDbContext<ToDoDbContext>(options =>
 
 var app = builder.Build();
 
-// --- CORS Middleware - חייב להיות לפני כל השאר! ---
-app.UseCors(MyAllowSpecificOrigins);
+// --- CORS - חייב להיות ראשון! ---
+app.UseCors();
 
-// --- Auto-create database and run migrations on startup ---
+// --- Auto-create database ---
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
     try
     {
-        // יוצר את מסד הנתונים והטבלאות אוטומטית
         dbContext.Database.EnsureCreated();
         Console.WriteLine("Database created/verified successfully!");
     }
@@ -58,7 +47,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// --- Swagger UI (Development and Production) ---
+// --- Swagger UI ---
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -75,7 +64,7 @@ app.MapGet("/", () => Results.Ok(new
     }
 }));
 
-// --- Health Check Endpoint ---
+// --- Health Check ---
 app.MapGet("/health", async (ToDoDbContext context) =>
 {
     try
@@ -97,7 +86,7 @@ app.MapGet("/health", async (ToDoDbContext context) =>
 
 // --- CRUD Endpoints ---
 
-// 1. Get all items
+// GET all items
 app.MapGet("/api/items", async (ToDoDbContext context) =>
 {
     try
@@ -112,14 +101,14 @@ app.MapGet("/api/items", async (ToDoDbContext context) =>
     }
 });
 
-// 2. Get single item by id
+// GET single item
 app.MapGet("/api/items/{id}", async (ToDoDbContext context, int id) =>
 {
     var item = await context.Item.FindAsync(id);
     return item == null ? Results.NotFound() : Results.Ok(item);
 });
 
-// 3. Create new item
+// POST new item
 app.MapPost("/api/items", async (ToDoDbContext context, Item item) =>
 {
     try
@@ -135,7 +124,7 @@ app.MapPost("/api/items", async (ToDoDbContext context, Item item) =>
     }
 });
 
-// 4. Update item
+// PUT update item
 app.MapPut("/api/items/{id}", async (ToDoDbContext context, int id, Item updatedItem) =>
 {
     try
@@ -156,7 +145,7 @@ app.MapPut("/api/items/{id}", async (ToDoDbContext context, int id, Item updated
     }
 });
 
-// 5. Delete item
+// DELETE item
 app.MapDelete("/api/items/{id}", async (ToDoDbContext context, int id) =>
 {
     try
