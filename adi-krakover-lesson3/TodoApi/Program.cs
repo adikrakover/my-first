@@ -16,11 +16,11 @@ builder.Services.AddCors(options =>
                       {
                           policy.WithOrigins(
                                     "http://localhost:3000",
-                                    "https://adi-krakovr-client.onrender.com",
-                                    "https://todo-client-krakover.onrender.com"
+                                    "https://adi-krakovr-client.onrender.com"
                                 )
                                 .AllowAnyHeader()
-                                .AllowAnyMethod();
+                                .AllowAnyMethod()
+                                .AllowCredentials();
                       });
 });
 
@@ -38,6 +38,9 @@ builder.Services.AddDbContext<ToDoDbContext>(options =>
 );
 
 var app = builder.Build();
+
+// --- CORS Middleware - חייב להיות לפני כל השאר! ---
+app.UseCors(MyAllowSpecificOrigins);
 
 // --- Auto-create database and run migrations on startup ---
 using (var scope = app.Services.CreateScope())
@@ -58,9 +61,6 @@ using (var scope = app.Services.CreateScope())
 // --- Swagger UI (Development and Production) ---
 app.UseSwagger();
 app.UseSwaggerUI();
-
-// --- CORS Middleware ---
-app.UseCors(MyAllowSpecificOrigins);
 
 // --- Root Endpoint ---
 app.MapGet("/", () => Results.Ok(new
