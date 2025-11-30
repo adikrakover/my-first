@@ -48,15 +48,17 @@ function App() {
     try {
       const updatedItem = {
         id: item.id,
-        name: item.name,
-        isComplete: !item.isComplete,
+        name: item.name || item.Name,
+        isComplete: !(item.isComplete || item.IsComplete),
       };
 
       await updateTask(item.id, updatedItem);
 
       setTodos(
         todos.map((todo) =>
-          todo.id === item.id ? { ...todo, isComplete: !todo.isComplete } : todo
+          todo.id === item.id 
+            ? { ...todo, isComplete: !todo.isComplete, IsComplete: !todo.IsComplete } 
+            : todo
         )
       );
       setError(null);
@@ -101,19 +103,19 @@ function App() {
 
       <ul className="todo-list">
         {Array.isArray(todos) && todos.map((todo) => (
-          <li key={todo.id} className={todo.isComplete ? 'completed' : ''}>
+          <li key={todo.id} className={todo.isComplete || todo.IsComplete ? 'completed' : ''}>
             <span
               className="task-text"
               onClick={() => updateCompleted(todo)}
             >
-              {todo.name}
+              {todo.name || todo.Name || 'משימה ללא שם'}
             </span>
             <div className="actions">
                 <button
                     className="complete-btn"
                     onClick={() => updateCompleted(todo)}
                 >
-                    {todo.isComplete ? '✅' : '☐'}
+                    {(todo.isComplete || todo.IsComplete) ? '✅' : '☐'}
                 </button>
                 <button
                     className="delete-btn"
