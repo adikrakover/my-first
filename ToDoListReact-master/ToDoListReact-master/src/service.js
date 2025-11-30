@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-// כתובת ה-API הבסיסית
-const BASE_URL = process.env.REACT_APP_API_URL || 'https://todo-api-krakover.onrender.com';
-const ENDPOINT = '/api/items'; 
+// כתובת ה-API המלאה - זה התיקון הקריטי!
+const API_URL = 'https://todo-api-krakover.onrender.com/api/items';
 
-// הגדרת baseURL
-axios.defaults.baseURL = BASE_URL; 
+// הגדרת headers
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 // Interceptor לטיפול בשגיאות
@@ -29,27 +27,27 @@ axios.interceptors.response.use(
 
 // GET (שליפת כל המשימות)
 export const getTasks = async () => {
-  const response = await axios.get(ENDPOINT); 
+  const response = await axios.get(API_URL); 
   return response.data;
 };
 
 // POST (יצירת משימה חדשה)
 export const createTask = async (taskName) => {
   const newTask = {
-    name: taskName,        // ✅ שינוי מ-title ל-name
-    isComplete: false,     // ✅ שינוי מ-isCompleted ל-isComplete
+    name: taskName,
+    isComplete: false,
   };
-  const response = await axios.post(ENDPOINT, newTask);
+  const response = await axios.post(API_URL, newTask);
   return response.data;
 };
 
 // PUT (עדכון משימה קיימת)
 export const updateTask = async (id, updatedTask) => {
-  const response = await axios.put(`${ENDPOINT}/${id}`, updatedTask);
+  const response = await axios.put(`${API_URL}/${id}`, updatedTask);
   return response.data;
 };
 
 // DELETE (מחיקת משימה)
 export const deleteTask = async (id) => {
-  await axios.delete(`${ENDPOINT}/${id}`);
+  await axios.delete(`${API_URL}/${id}`);
 };
