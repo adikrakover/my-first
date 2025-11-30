@@ -13,10 +13,13 @@ function App() {
     const fetchTodos = async () => {
       try {
         const data = await getTasks();
-        setTodos(data);
+        // תיקון: וודא שזה מערך
+        const tasksArray = Array.isArray(data) ? data : [];
+        setTodos(tasksArray);
         setIsLoading(false);
+        console.log('Fetched tasks:', tasksArray);
       } catch (err) {
-        setError("Failed to fetch tasks.");
+        setError("Failed to fetch tasks: " + err.message);
         setIsLoading(false);
         console.error("Error fetching todos:", err);
       }
@@ -33,32 +36,32 @@ function App() {
       const newTask = await createTask(input);
       setTodos([...todos, newTask]);
       setInput('');
+      setError(null);
     } catch (err) {
-      setError("Failed to create task.");
+      setError("Failed to create task: " + err.message);
       console.error("Error creating todo:", err);
     }
   };
 
-  // 3. עדכון מצב השלמה (PUT) - תיקון שגיאת 400
+  // 3. עדכון מצב השלמה (PUT)
   const updateCompleted = async (item) => {
     try {
-      // *** התיקון הקריטי: הוספת ה-ID לאובייקט הנשלח לשרת ***
       const updatedItem = {
-        id: item.id, // זה התיקון שמונע שגיאת 400
+        id: item.id,
         name: item.name,
         isComplete: !item.isComplete,
       };
 
       await updateTask(item.id, updatedItem);
 
-      // עדכון ה-UI
       setTodos(
         todos.map((todo) =>
           todo.id === item.id ? { ...todo, isComplete: !todo.isComplete } : todo
         )
       );
+      setError(null);
     } catch (err) {
-      setError("Failed to update task status.");
+      setError("Failed to update task: " + err.message);
       console.error("Error updating completed status:", err);
     }
   };
@@ -68,8 +71,9 @@ function App() {
     try {
       await deleteTask(id);
       setTodos(todos.filter((todo) => todo.id !== id));
+      setError(null);
     } catch (err) {
-      setError("Failed to delete task.");
+      setError("Failed to delete task: " + err.message);
       console.error("Error deleting todo:", err);
     }
   };
@@ -96,7 +100,7 @@ function App() {
       </form>
 
       <ul className="todo-list">
-        {todos.map((todo) => (
+        {Array.isArray(todos) && todos.map((todo) => (
           <li key={todo.id} className={todo.isComplete ? 'completed' : ''}>
             <span
               className="task-text"
