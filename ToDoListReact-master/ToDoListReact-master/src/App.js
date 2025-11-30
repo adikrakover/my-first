@@ -13,11 +13,11 @@ function App() {
     const fetchTodos = async () => {
       try {
         const data = await getTasks();
-        // תיקון: וודא שזה מערך
+        console.log('Raw API response:', data);
         const tasksArray = Array.isArray(data) ? data : [];
+        console.log('Tasks array:', tasksArray);
         setTodos(tasksArray);
         setIsLoading(false);
-        console.log('Fetched tasks:', tasksArray);
       } catch (err) {
         setError("Failed to fetch tasks: " + err.message);
         setIsLoading(false);
@@ -33,7 +33,9 @@ function App() {
     if (!input.trim()) return;
 
     try {
+      console.log('Creating task with name:', input);
       const newTask = await createTask(input);
+      console.log('Created task:', newTask);
       setTodos([...todos, newTask]);
       setInput('');
       setError(null);
@@ -46,18 +48,24 @@ function App() {
   // 3. עדכון מצב השלמה (PUT)
   const updateCompleted = async (item) => {
     try {
+      const currentIsComplete = item.isComplete ?? item.IsComplete ?? false;
+      const newIsComplete = !currentIsComplete;
+      
+      console.log('Updating task:', item.id, 'from', currentIsComplete, 'to', newIsComplete);
+      
       const updatedItem = {
         id: item.id,
         name: item.name || item.Name,
-        isComplete: !(item.isComplete || item.IsComplete),
+        isComplete: newIsComplete,
       };
 
       await updateTask(item.id, updatedItem);
 
+      // עדכון ה-state המקומי
       setTodos(
         todos.map((todo) =>
           todo.id === item.id 
-            ? { ...todo, isComplete: !todo.isComplete, IsComplete: !todo.IsComplete } 
+            ? { ...todo, isComplete: newIsComplete, IsComplete: newIsComplete } 
             : todo
         )
       );
@@ -71,7 +79,9 @@ function App() {
   // 4. מחיקת משימה (DELETE)
   const deleteTodo = async (id) => {
     try {
+      console.log('Deleting task with id:', id);
       await deleteTask(id);
+      // מחק רק את המשימה עם ה-ID הספציפי
       setTodos(todos.filter((todo) => todo.id !== id));
       setError(null);
     } catch (err) {
@@ -102,30 +112,37 @@ function App() {
       </form>
 
       <ul className="todo-list">
-        {Array.isArray(todos) && todos.map((todo) => (
-          <li key={todo.id} className={todo.isComplete || todo.IsComplete ? 'completed' : ''}>
-            <span
-              className="task-text"
-              onClick={() => updateCompleted(todo)}
-            >
-              {todo.name || todo.Name || 'משימה ללא שם'}
-            </span>
-            <div className="actions">
-                <button
-                    className="complete-btn"
-                    onClick={() => updateCompleted(todo)}
-                >
-                    {(todo.isComplete || todo.IsComplete) ? '✅' : '☐'}
-                </button>
-                <button
-                    className="delete-btn"
-                    onClick={() => deleteTodo(todo.id)}
-                >
-                    ❌
-                </button>
-            </div>
-          </li>
-        ))}
+        {Array.isArray(todos) && todos.map((todo) => {
+          const taskName = todo.name || todo.Name || 'משימה ללא שם';
+          const isComplete = todo.isComplete ?? todo.IsComplete ?? false;
+          
+          console.log('Rendering task:', todo.id, 'name:', taskName, 'complete:', isComplete);
+          
+          return (
+            <li key={todo.id} className={isComplete ? 'completed' : ''}>
+              <span
+                className="task-text"
+                onClick={() => updateCompleted(todo)}
+              >
+                {taskName}
+              </span>
+              <div className="actions">
+                  <button
+                      className="complete-btn"
+                      onClick={() => updateCompleted(todo)}
+                  >
+                      {isComplete ? '✅' : '☐'}
+                  </button>
+                  <button
+                      className="delete-btn"
+                      onClick={() => deleteTodo(todo.id)}
+                  >
+                      ❌
+                  </button>
+              </div>
+            </li>
+          );
+        })}
       </ul>
       {todos.length === 0 && !isLoading && (
         <p className="no-tasks">אין משימות להצגה. הוסף משימה!</p>
