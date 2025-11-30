@@ -48,26 +48,28 @@ function App() {
   // 3. עדכון מצב השלמה (PUT)
   const updateCompleted = async (item) => {
     try {
+      const taskId = item.id || item.Id;
       const currentIsComplete = item.isComplete ?? item.IsComplete ?? false;
       const newIsComplete = !currentIsComplete;
       
-      console.log('Updating task:', item.id, 'from', currentIsComplete, 'to', newIsComplete);
+      console.log('Updating task:', taskId, 'from', currentIsComplete, 'to', newIsComplete);
       
       const updatedItem = {
-        id: item.id,
+        id: taskId,
         name: item.name || item.Name,
         isComplete: newIsComplete,
       };
 
-      await updateTask(item.id, updatedItem);
+      await updateTask(taskId, updatedItem);
 
       // עדכון ה-state המקומי
       setTodos(
-        todos.map((todo) =>
-          todo.id === item.id 
+        todos.map((todo) => {
+          const currentId = todo.id || todo.Id;
+          return currentId === taskId 
             ? { ...todo, isComplete: newIsComplete, IsComplete: newIsComplete } 
-            : todo
-        )
+            : todo;
+        })
       );
       setError(null);
     } catch (err) {
@@ -82,7 +84,10 @@ function App() {
       console.log('Deleting task with id:', id);
       await deleteTask(id);
       // מחק רק את המשימה עם ה-ID הספציפי
-      setTodos(todos.filter((todo) => todo.id !== id));
+      setTodos(todos.filter((todo) => {
+        const currentId = todo.id || todo.Id;
+        return currentId !== id;
+      }));
       setError(null);
     } catch (err) {
       setError("Failed to delete task: " + err.message);
@@ -113,13 +118,14 @@ function App() {
 
       <ul className="todo-list">
         {Array.isArray(todos) && todos.map((todo) => {
+          const taskId = todo.id || todo.Id;
           const taskName = todo.name || todo.Name || 'משימה ללא שם';
           const isComplete = todo.isComplete ?? todo.IsComplete ?? false;
           
-          console.log('Rendering task:', todo.id, 'name:', taskName, 'complete:', isComplete);
+          console.log('Rendering task:', taskId, 'name:', taskName, 'complete:', isComplete);
           
           return (
-            <li key={todo.id} className={isComplete ? 'completed' : ''}>
+            <li key={taskId} className={isComplete ? 'completed' : ''}>
               <span
                 className="task-text"
                 onClick={() => updateCompleted(todo)}
@@ -135,7 +141,7 @@ function App() {
                   </button>
                   <button
                       className="delete-btn"
-                      onClick={() => deleteTodo(todo.id)}
+                      onClick={() => deleteTodo(taskId)}
                   >
                       ❌
                   </button>
